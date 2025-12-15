@@ -8,11 +8,11 @@
   <style>
     :root{
       --bg:#022c22; --bg2:#065f46; --card:#052e16;
-      --accent:#facc15; --text:#e5e7eb; --muted:#9ca3af; --danger:#f97373;
+      --accent:#facc15; --text:#e5e7eb; --muted:#9ca3af;
+      --danger:#f97373; --ok:#22c55e;
       --line:rgba(148,163,184,.28);
       --glass:rgba(2,44,34,.35);
       --shadow:rgba(0,0,0,.75);
-      --ok:#22c55e;
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{
@@ -24,17 +24,16 @@
       color:var(--text);
       background:
         radial-gradient(circle at top,#16a34a22 0,transparent 55%),
-        radial-gradient(circle at 20% 80%, rgba(250,204,21,.14) 0, transparent 55%),
+        radial-gradient(circle at 20% 85%, rgba(250,204,21,.14) 0, transparent 55%),
         linear-gradient(135deg,var(--bg),var(--bg2));
       padding:20px;
     }
     .card{
-      max-width:620px;width:100%;
+      max-width:640px;width:100%;
       background:linear-gradient(145deg,rgba(5,46,22,.97),rgba(6,95,70,.96));
       border-radius:26px;
       border:1px solid rgba(15,118,110,.45);
       padding:22px 18px;
-      text-align:center;
       box-shadow:0 24px 60px var(--shadow);
       position:relative;
       overflow:hidden;
@@ -42,19 +41,20 @@
     .card:before{
       content:"";
       position:absolute; inset:-2px;
-      background:radial-gradient(circle at 20% 0, rgba(250,204,21,.14), transparent 45%),
-                 radial-gradient(circle at 80% 120%, rgba(34,197,94,.12), transparent 55%);
+      background:
+        radial-gradient(circle at 18% 0, rgba(250,204,21,.14), transparent 45%),
+        radial-gradient(circle at 82% 120%, rgba(34,197,94,.12), transparent 55%);
       pointer-events:none;
     }
     .inner{position:relative; z-index:2}
     .top{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:10px; margin-bottom:10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
     }
-    .brand{
-      display:flex; align-items:center; gap:10px;
-      text-align:left;
-    }
+    .brand{display:flex;align-items:center;gap:10px}
     .ico{
       width:54px;height:54px;
       border-radius:50%;
@@ -78,8 +78,7 @@
       color:var(--muted);
       line-height:1.4;
     }
-
-    .pillbar{display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end;}
+    .pillbar{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
     .pill{
       border:1px solid var(--line);
       background:rgba(250,204,21,.10);
@@ -92,32 +91,18 @@
       transition:.2s;
       user-select:none;
     }
-    .pill:hover{transform:translateY(-1px); border-color:rgba(250,204,21,.6)}
+    .pill:hover{transform:translateY(-1px);border-color:rgba(250,204,21,.6)}
     .pill.ghost{background:rgba(2,44,34,.25)}
-    .pill.danger{background:rgba(249,115,115,.12); border-color:rgba(249,115,115,.35)}
-
+    .pill.danger{background:rgba(249,115,115,.12);border-color:rgba(249,115,115,.35)}
     .sep{height:1px;background:var(--line);margin:14px 0}
 
-    #status{
-      font-size:14px;
-      color:var(--muted);
-      line-height:1.6;
-    }
-    #mini{
-      margin-top:10px;
-      font-size:12px;
-      color:var(--muted);
-      line-height:1.6;
-    }
+    #status{font-size:14px;color:var(--muted);line-height:1.6}
+    #mini{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.6}
     .err{color:var(--danger)}
     .ok{color:var(--ok)}
 
-    .chooser{display:none; margin-top:14px; text-align:left;}
-    .grid{
-      display:grid;
-      gap:10px;
-      grid-template-columns:1fr;
-    }
+    .chooser{display:none;margin-top:14px;text-align:left}
+    .grid{display:grid;gap:10px}
     .btn{
       width:100%;
       border:1px solid var(--line);
@@ -132,25 +117,16 @@
       justify-content:space-between;
       gap:10px;
       transition:.2s;
+      text-align:left;
     }
     .btn:hover{
       transform:translateY(-1px);
       border-color:rgba(250,204,21,.6);
       box-shadow:0 14px 34px rgba(0,0,0,.25);
     }
-    .left{
-      display:flex; flex-direction:column; gap:2px;
-    }
-    .title{
-      font-size:14px;
-      font-weight:1000;
-      letter-spacing:.02em;
-    }
-    .desc{
-      font-size:12px;
-      color:var(--muted);
-      font-weight:700;
-    }
+    .left{display:flex;flex-direction:column;gap:2px}
+    .title{font-size:14px;font-weight:1000;letter-spacing:.02em}
+    .desc{font-size:12px;color:var(--muted);font-weight:700}
     .tag{
       font-size:12px;
       padding:6px 10px;
@@ -165,7 +141,6 @@
       border-color:rgba(34,197,94,.45);
       background:rgba(34,197,94,.12);
     }
-
     .foot{
       margin-top:14px;
       padding-top:12px;
@@ -212,7 +187,7 @@
       <div id="mini"></div>
 
       <div class="chooser" id="chooser">
-        <div style="margin:10px 0 8px; color:var(--muted); font-size:12px; font-weight:900;">
+        <div style="margin:10px 0 8px;color:var(--muted);font-size:12px;font-weight:900;">
           Choisis ton module :
         </div>
         <div class="grid" id="modulesGrid"></div>
@@ -220,7 +195,7 @@
 
       <div class="foot">
         <div>Connecté à <span class="brandmark">DIGIYLYFE</span> ∞</div>
-        <div id="where" class="muted"></div>
+        <div id="where"></div>
       </div>
     </div>
   </div>
@@ -233,15 +208,24 @@
   const SUPABASE_URL = "https://wesqmwjjtsefyjnluosj.supabase.co";
   const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
 
+  // ✅ Connexion OTP
   const LOGIN_URL = "https://beauville.github.io/login-otp-fix/";
+
+  // ✅ Mon Espace (pour les boutons dans les modules)
+  const MON_ESPACE_URL = "https://beauville.github.io/mon-espace-digiy/";
 
   // ✅ Mapping modules -> URL (ABSOLU)
   const MODULE_ROUTES = {
+    // Chauffeur
     "chauffeur": "https://beauville.github.io/digiy-chauffeur/",
     "driver":    "https://beauville.github.io/digiy-chauffeur/",
     "vtc":       "https://beauville.github.io/digiy-chauffeur/",
     "taxi":      "https://beauville.github.io/digiy-chauffeur/",
+
+    // LOC
     "loc":       "https://beauville.github.io/digiy-loc-pro-/",
+
+    // Exemples (si existants)
     "resto":     "https://beauville.github.io/digiy-resto-pro/",
     "market":    "https://beauville.github.io/digiy-market-pro/",
     "pos":       "https://beauville.github.io/digiy-pos-pro/"
@@ -253,17 +237,22 @@
   // =========================
   // DOM
   // =========================
-  const statusEl = document.getElementById("status");
-  const miniEl   = document.getElementById("mini");
-  const subtitle = document.getElementById("subtitle");
-  const chooser  = document.getElementById("chooser");
-  const gridEl   = document.getElementById("modulesGrid");
-  const whereEl  = document.getElementById("where");
+  const statusEl  = document.getElementById("status");
+  const miniEl    = document.getElementById("mini");
+  const subtitle  = document.getElementById("subtitle");
+  const chooser   = document.getElementById("chooser");
+  const gridEl    = document.getElementById("modulesGrid");
+  const whereEl   = document.getElementById("where");
   const btnChoose = document.getElementById("btnChoose");
   const btnLogout = document.getElementById("btnLogout");
 
-  const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  // =========================
+  // URL PARAMS (menu forcé)
+  // =========================
+  const params = new URLSearchParams(window.location.search);
+  const forceChoose = params.get("choose") === "1";
 
+  const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   const go = (url) => setTimeout(() => window.location.replace(url), 650);
 
   const normalizeModules = (arr) =>
@@ -302,14 +291,18 @@
 
     const unique = Array.from(new Set(modules));
 
+    subtitle.textContent = unique.length + " module(s) actif(s)";
+    miniEl.innerHTML = `
+      ${forceChoose ? "<span class='ok'>Menu forcé ✅</span><br>" : ""}
+      Choisis ton module, et on décolle.
+    `;
+
     unique.forEach(mod => {
       const url = resolveUrlForModule(mod) || FALLBACK_URL;
+      const isLast = last && mod === last;
 
       const btn = document.createElement("button");
       btn.className = "btn";
-
-      const isLast = last && mod === last;
-
       btn.innerHTML = `
         <div class="left">
           <div class="title">${labelForModule(mod)}</div>
@@ -327,23 +320,18 @@
 
       gridEl.appendChild(btn);
     });
-
-    // message clair
-    subtitle.textContent = unique.length + " module(s) actif(s)";
   }
 
   // =========================
-  // ACTIONS UI
+  // UI actions
   // =========================
   btnChoose.addEventListener("click", () => {
-    // on ré-affiche le menu, sans perdre session
-    chooser.style.display = (chooser.style.display === "none") ? "block" : "none";
+    // 👉 menu forcé, même si dernier module existe
+    window.location.href = MON_ESPACE_URL + "?choose=1";
   });
 
   btnLogout.addEventListener("click", async () => {
-    try{
-      await client.auth.signOut();
-    }catch(e){}
+    try{ await client.auth.signOut(); }catch(e){}
     localStorage.removeItem(LAST_KEY);
     statusEl.innerHTML = "<span class='err'>Déconnecté.</span>";
     miniEl.textContent = "Retour connexion…";
@@ -351,12 +339,12 @@
   });
 
   // =========================
-  // 1) Session obligatoire
+  // 1) Session
   // =========================
   const { data: sessionData } = await client.auth.getSession();
   if (!sessionData?.session) {
     statusEl.innerHTML = "<span class='err'>Accès non autorisé</span>";
-    miniEl.innerHTML = "Retour vers la connexion…";
+    miniEl.textContent = "Retour vers la connexion…";
     return go(LOGIN_URL);
   }
 
@@ -367,7 +355,7 @@
   const user = userData?.user;
   if (!user?.id) {
     statusEl.innerHTML = "<span class='err'>Session invalide</span>";
-    miniEl.innerHTML = "Retour vers la connexion…";
+    miniEl.textContent = "Retour vers la connexion…";
     return go(LOGIN_URL);
   }
 
@@ -375,7 +363,7 @@
   miniEl.textContent = "Lecture sécurisée de la base DIGIY…";
 
   // =========================
-  // 3) DB tranche : pros.modules
+  // 3) DB tranche
   // =========================
   const { data: pro, error } = await client
     .from("pros")
@@ -386,7 +374,7 @@
   if (error || !pro) {
     console.error("❌ PRO introuvable", error);
     statusEl.innerHTML = "<span class='err'>Profil PRO introuvable</span>";
-    miniEl.innerHTML = "Compte non encore rattaché à un module DIGIY.<br>Retour connexion…";
+    miniEl.innerHTML = "Compte non rattaché à un PRO. Retour connexion…";
     return go(LOGIN_URL);
   }
 
@@ -396,7 +384,7 @@
 
   if (!pro.is_active) {
     statusEl.innerHTML = "<span class='err'>Compte en attente d’activation</span>";
-    miniEl.innerHTML = `Bienvenue ${who ? "<b>"+who+"</b>" : ""}<br>Ton compte est bien connecté, mais pas encore actif.`;
+    miniEl.innerHTML = `Bienvenue ${who ? "<b>"+who+"</b>" : ""}<br>Ton compte est connecté, mais pas encore actif.`;
     subtitle.textContent = "En attente d’activation";
     return;
   }
@@ -407,14 +395,15 @@
   statusEl.innerHTML = "<span class='ok'>Accès validé ✅</span>";
   miniEl.innerHTML = `Bienvenue ${who ? "<b>"+who+"</b>" : ""}<br>Préparation de ton module…`;
 
-  // 4) Aucun module -> fallback
+  // 4) Aucun module
   if (!modules.length) {
     miniEl.innerHTML += "<br><span class='err'>Aucun module assigné.</span> Direction HUB…";
     return go(FALLBACK_URL);
   }
 
-  // 5) Un seul module -> direct
-  if (Array.from(new Set(modules)).length === 1) {
+  // 5) Un seul module
+  const uniqueCount = new Set(modules).size;
+  if (uniqueCount === 1) {
     const mod = modules[0];
     const url = resolveUrlForModule(mod) || FALLBACK_URL;
     localStorage.setItem(LAST_KEY, mod);
@@ -423,15 +412,20 @@
   }
 
   // 6) Plusieurs modules
-  // ✅ Si on a un "dernier module", auto-redirect
+  // ✅ si menu forcé -> afficher direct
+  if (forceChoose) {
+    showChooser(modules, last);
+    return;
+  }
+
+  // ✅ sinon auto-redirect vers dernier module si possible
   if (last && modules.includes(last)) {
     const url = resolveUrlForModule(last) || FALLBACK_URL;
-    miniEl.innerHTML = `Dernier module utilisé : <b>${last}</b><br>Redirection automatique…`;
+    miniEl.innerHTML = `Dernier module utilisé : <b>${last}</b><br>Redirection automatique…<br><span class="muted">Pour choisir : clique “Changer de module”.</span>`;
     return go(url);
   }
 
-  // ✅ Sinon menu
-  miniEl.innerHTML = "Choisis ton module, et on décolle.";
+  // ✅ sinon menu
   showChooser(modules, last);
 
 })();
