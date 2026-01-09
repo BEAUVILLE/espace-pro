@@ -2,8 +2,8 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mon Espace DIGIY</title>
+<meta name="viewport" content="width=device-width, initial-scale=1,viewport-fit=cover">
+<title>Mon Espace PRO — DIGIY</title>
 
 <style>
 :root{
@@ -18,21 +18,26 @@ body{
   min-height:100vh;
   display:flex;align-items:center;justify-content:center;
   font-family:system-ui,-apple-system,Segoe UI,Roboto;
-  background:linear-gradient(135deg,var(--bg),var(--bg2));
+  background:
+    radial-gradient(circle at top, rgba(250,204,21,.10), transparent 55%),
+    linear-gradient(135deg,var(--bg),var(--bg2));
   color:var(--text);padding:20px;
 }
 .card{
-  max-width:640px;width:100%;
+  max-width:720px;width:100%;
   background:linear-gradient(145deg,rgba(5,46,22,.97),rgba(6,95,70,.96));
   border-radius:26px;border:1px solid rgba(15,118,110,.45);
   padding:22px;box-shadow:0 24px 60px rgba(0,0,0,.7);
 }
-.top{display:flex;justify-content:space-between;align-items:center}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.left{display:flex;gap:12px;align-items:center}
 .ico{
   width:52px;height:52px;border-radius:50%;
   display:grid;place-items:center;
   background:radial-gradient(circle at 30% 0,#facc15,transparent 55%);
   color:#022c22;font-size:24px;font-weight:900;
+  border:1px solid rgba(250,204,21,.35);
+  box-shadow:0 0 20px rgba(250,204,21,.15);
 }
 h1{font-size:14px;letter-spacing:.14em}
 .subtitle{font-size:12px;color:var(--muted)}
@@ -41,10 +46,12 @@ h1{font-size:14px;letter-spacing:.14em}
   background:rgba(250,204,21,.12);
   padding:8px 12px;border-radius:999px;
   font-weight:900;font-size:12px;cursor:pointer;
+  user-select:none;
 }
+.pill:hover{border-color:rgba(250,204,21,.55)}
 .sep{height:1px;background:var(--line);margin:14px 0}
-#status{font-size:14px;color:var(--muted)}
-#mini{font-size:12px;color:var(--muted);margin-top:6px}
+#status{font-size:14px;color:var(--muted);font-weight:800}
+#mini{font-size:12px;color:var(--muted);margin-top:6px;line-height:1.4}
 .ok{color:var(--ok)} .err{color:var(--danger)}
 .grid{display:grid;gap:10px;margin-top:14px}
 .btn{
@@ -59,7 +66,32 @@ h1{font-size:14px;letter-spacing:.14em}
   padding:6px 10px;border-radius:999px;
   background:rgba(250,204,21,.12);
   border:1px solid rgba(250,204,21,.35);
-  font-size:12px;
+  font-size:12px;font-weight:900;
+}
+.badge{
+  padding:6px 10px;border-radius:999px;
+  border:1px solid rgba(148,163,184,.28);
+  background:rgba(0,0,0,.18);
+  font-size:12px;font-weight:900;color:rgba(229,231,235,.92)
+}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.smallbtn{
+  flex:1;min-width:220px;
+  padding:12px 14px;border-radius:14px;
+  background:rgba(0,0,0,.18);
+  border:1px solid var(--line);
+  color:var(--text);
+  font-weight:900;cursor:pointer;
+}
+.smallbtn:hover{border-color:rgba(250,204,21,.55)}
+.note{
+  margin-top:12px;
+  padding:12px;
+  border:1px solid var(--line);
+  background:rgba(0,0,0,.12);
+  border-radius:14px;
+  color:rgba(229,231,235,.86);
+  font-size:12px;line-height:1.5
 }
 </style>
 
@@ -69,10 +101,12 @@ h1{font-size:14px;letter-spacing:.14em}
 <body>
 <div class="card">
   <div class="top">
-    <div>
+    <div class="left">
       <div class="ico">🦅</div>
-      <h1>MON ESPACE DIGIY</h1>
-      <div class="subtitle" id="subtitle">Espace ROI</div>
+      <div>
+        <h1>MON ESPACE PRO DIGIY</h1>
+        <div class="subtitle" id="subtitle">JB BEAUVILLE • Accès PRO</div>
+      </div>
     </div>
     <div class="pill" id="logout">Déconnexion</div>
   </div>
@@ -82,62 +116,208 @@ h1{font-size:14px;letter-spacing:.14em}
   <div id="status">Chargement…</div>
   <div id="mini"></div>
 
+  <div class="row" id="quick" style="display:none">
+    <button class="smallbtn" id="btnInscription">➕ Ajouter un module</button>
+    <button class="smallbtn" id="btnRefresh">🔄 Actualiser</button>
+  </div>
+
   <div class="grid" id="modules"></div>
+
+  <div class="note">
+    <b>Règle DIGIY :</b> si ton abonnement n’est pas actif, tu vois “Activation en cours”.
+    Une fois activé, l’accès est direct. <b>0% commission</b>.
+  </div>
 </div>
 
 <script>
 (async()=>{
-const SUPABASE_URL="https://wesqmwjjtsefyjnluosj.supabase.co";
-const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
+  // =========================
+  // CONFIG
+  // =========================
+  const SUPABASE_URL="https://wesqmwjjtsefyjnluosj.supabase.co";
+  const SUPABASE_ANON_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indlc3Ftd2pqdHNlZnlqbmx1b3NqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjUxNzg4ODIsImV4cCI6MjA4MDc1NDg4Mn0.dZfYOc2iL2_wRYL3zExZFsFSBK6AbMeOid2LrIjcTdA";
 
-const LOGIN_URL="https://beauville.github.io/login-otp-fix/";
-const MODULES_URL={
-  chauffeur:"https://beauville.github.io/digiy-chauffeur/",
-  loc:"https://beauville.github.io/digiy-loc-pro-/",
-  resto:"https://beauville.github.io/digiy-resto-pro/",
-  market:"https://beauville.github.io/digiy-market-pro/"
+  const ENTRY_URL = "https://beauville.github.io/inscription-digiy/";
+
+  // Liens modules (mets les bons liens chez toi)
+  const MODULES_URL = {
+  DRIVER_PRO:  "https://beauville.github.io/digiy-pro-driver/",
+  LOC:         "https://beauville.github.io/digiy-loc-pro-/",
+  RESTO:       "https://beauville.github.io/digiy-resto-pro/",
+  RESA:        "https://beauville.github.io/digiy-resa-pro/",
+  MARKET:      "https://beauville.github.io/digiy-market-pro/",
+  BUILD:       "https://beauville.github.io/digiy-build-pro/",
+  POS:         "https://beauville.github.io/digiy-pos-pro/",
+  JOBS:        "https://beauville.github.io/digiy-jobs-pro/",
+  FRET:        "https://beauville.github.io/digiy-fret-pro/",
+  FRET_CLIENT: "https://beauville.github.io/digiy-fret-client/",
+  EXPLORER:    "https://beauville.github.io/digiy-explorer/"
 };
 
-const client=supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
-const status=document.getElementById("status");
-const mini=document.getElementById("mini");
-const grid=document.getElementById("modules");
+  // RPC (tu as déjà is_driver_active). Ici on veut un RPC universel.
+  // Si tu n’as PAS encore: on fallback avec driver only.
+  // -> idéal: créer rpc is_module_active(p_phone, p_module) côté Supabase plus tard.
+  async function isActiveFallback(phone, module){
+    // fallback : driver only
+    if(module === "DRIVER_PRO"){
+      const { data, error } = await sb.rpc("is_driver_active", { p_phone: phone });
+      if(error) return null;
+      return !!data;
+    }
+    // modules autres : on ne bloque pas (on montre "Activation en cours" si tu veux strict)
+    // Ici: on laisse "true" pour ne pas casser l’expérience tant que RPC universel n’existe pas.
+    return true;
+  }
 
-const {data:s}=await client.auth.getSession();
-if(!s?.session){location.href=LOGIN_URL;return;}
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const {data:u}=await client.auth.getUser();
-const user=u.user;
+  const status = document.getElementById("status");
+  const mini   = document.getElementById("mini");
+  const grid   = document.getElementById("modules");
+  const quick  = document.getElementById("quick");
 
-const {data:pro}=await client
-  .from("pros")
-  .select("modules,is_active,display_name,auth_user_id")
-  .eq("auth_user_id",user.id)
-  .maybeSingle();
+  // =========================
+  // Helpers phone
+  // =========================
+  function normPhone(p){
+    p = String(p||"").trim().replace(/\s+/g,"").replace(/[^\d+]/g,"");
+    if(p.startsWith("00221")) p = "+221" + p.slice(5);
+    if(!p.startsWith("+") && p.startsWith("221")) p = "+" + p;
+    if(!p.startsWith("+221") && /^\d{9}$/.test(p)) p = "+221" + p;
+    return p;
+  }
 
-if(!pro||!pro.is_active){
-  status.innerHTML="<span class='err'>Compte non actif</span>";
-  return;
-}
+  function getPhone(){
+    const s = sessionStorage.getItem("digiy_driver_phone");
+    if (s) return normPhone(s);
 
-// 🔥 PRIVILÈGE ROI : TOI TU VOIS TOUT
-const modules=[...new Set(pro.modules||[])];
+    const g = localStorage.getItem("digiy_phone");
+    if (g) return normPhone(g);
 
-status.innerHTML="<span class='ok'>Accès total validé</span>";
-mini.innerHTML="Choisis ton module 👑";
+    try{
+      const a = JSON.parse(localStorage.getItem("digiy_driver_access_pin")||"null");
+      if(a && a.phone) return normPhone(a.phone);
+    }catch(_){}
 
-modules.forEach(m=>{
-  const btn=document.createElement("div");
-  btn.className="btn";
-  btn.innerHTML=`<div>${m.toUpperCase()}</div><span class="tag">ouvrir</span>`;
-  btn.onclick=()=>location.href=MODULES_URL[m];
-  grid.appendChild(btn);
-});
+    return null;
+  }
 
-document.getElementById("logout").onclick=async()=>{
-  await client.auth.signOut();
-  location.href=LOGIN_URL;
-};
+  function goInscription(module){
+    const u = new URL(ENTRY_URL);
+    if(module) u.searchParams.set("module", String(module));
+    u.searchParams.set("from", location.href);
+    location.href = u.toString();
+  }
+
+  function clearSession(){
+    // on vide ce qui crée des boucles
+    sessionStorage.removeItem("digiy_driver_phone");
+    localStorage.removeItem("digiy_phone");
+    localStorage.removeItem("digiy_driver_access_pin");
+    // pro connu (si tu veux tout reset)
+    localStorage.removeItem("digiy_known_pro");
+  }
+
+  function addCard(title, right, sub, onClick){
+    const btn = document.createElement("div");
+    btn.className = "btn";
+    btn.innerHTML = `
+      <div>
+        <div style="font-size:14px">${title}</div>
+        <div style="font-size:12px;opacity:.75;margin-top:4px">${sub||""}</div>
+      </div>
+      <span class="tag">${right||"ouvrir"}</span>
+    `;
+    btn.onclick = onClick;
+    grid.appendChild(btn);
+  }
+
+  function badgeHtml(text){
+    return `<span class="badge">${text}</span>`;
+  }
+
+  // =========================
+  // Start
+  // =========================
+  const phone = getPhone();
+
+  if(!phone){
+    status.innerHTML = "<span class='err'>Aucun téléphone détecté</span>";
+    mini.innerHTML = "Passe par l’inscription (porte unique) pour créer ton accès PRO.";
+    grid.innerHTML = "";
+    addCard("📝 Aller à l’inscription DIGIY", "ouvrir", "Choisir module + tarifs + Wave", ()=>goInscription(""));
+    return;
+  }
+
+  // pro connu
+  try{ localStorage.setItem("digiy_known_pro","1"); }catch(_){}
+
+  document.getElementById("subtitle").textContent = `JB BEAUVILLE • ${phone}`;
+  quick.style.display = "flex";
+
+  document.getElementById("btnInscription").onclick = ()=>goInscription("");
+  document.getElementById("btnRefresh").onclick = ()=>location.reload();
+
+  document.getElementById("logout").onclick = ()=>{
+    clearSession();
+    location.reload();
+  };
+
+  status.innerHTML = "<span class='ok'>Accès PRO détecté</span>";
+  mini.innerHTML = `Téléphone : <b>${phone}</b><br>Choisis ton module 👑`;
+
+  // =========================
+  // Modules affichés
+  // (tu peux changer la liste selon ce que tu veux montrer)
+  // =========================
+  const modulesToShow = [
+  { code:"DRIVER_PRO",  label:"🚗 DRIVER PRO",   hint:"Chauffeur — 0% commission" },
+  { code:"LOC",         label:"🏠 LOC",          hint:"Locations — paiement direct" },
+  { code:"RESTO",       label:"🍽️ RESTO",        hint:"Restaurant & caisse" },
+  { code:"RESA",        label:"📅 RÉSA",         hint:"Réservations (tables / services)" },
+  { code:"MARKET",      label:"🛒 MARKET",       hint:"Boutique & stock" },
+  { code:"BUILD",       label:"🏗️ BUILD",        hint:"Artisans & devis" },
+  { code:"POS",         label:"💳 POS",          hint:"Caisse boutique" },
+  { code:"JOBS",        label:"💼 JOBS",         hint:"Emploi & recrutement" },
+  { code:"EXPLORER",    label:"🧭 EXPLORER",     hint:"Activités & découvertes" },
+  { code:"FRET",        label:"📦 FRET PRO",     hint:"Transporteur / livreur" },
+  { code:"FRET_CLIENT", label:"📦 FRET CLIENT",  hint:"Envoyer une marchandise" }
+];
+
+  grid.innerHTML = "";
+
+  for(const m of modulesToShow){
+    // check actif (fallback driver only)
+    const ok = await isActiveFallback(phone, m.code);
+
+    if(ok === null){
+      addCard(
+        `${m.label} ${badgeHtml("vérif indispo")}`,
+        "ouvrir",
+        m.hint,
+        ()=>location.href = (MODULES_URL[m.code] || "#")
+      );
+      continue;
+    }
+
+    if(ok === false){
+      addCard(
+        `${m.label} ${badgeHtml("activation en cours")}`,
+        "voir",
+        "Ton paiement est en traitement. Dès activation, accès direct.",
+        ()=>goInscription(m.code)
+      );
+      continue;
+    }
+
+    addCard(
+      `${m.label} ${badgeHtml("actif")}`,
+      "ouvrir",
+      m.hint,
+      ()=>location.href = (MODULES_URL[m.code] || "#")
+    );
+  }
+
 })();
 </script>
 </body>
